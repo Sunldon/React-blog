@@ -25,7 +25,7 @@ function AddArticle(props) {
   const [selectedType, setSelectType] = useState('0') //选择的文章类别 
 
   const changeContent = (e) => {
-    console.log('changeContent', e.target.value)
+    // console.log('changeContent', e.target.value)
     setArticleContent(e.target.value)
     let html = marked(e.target.value)
     setMarkdownContent(html)
@@ -50,7 +50,7 @@ function AddArticle(props) {
       method: 'get',
       url: servicePath.getTypeInfo,
       header: { 'Access-Control-Allow-Origin': '*' },
-      withCredentials: true
+      withCredentials: false
     }).then(
       res => {
         if (res.data.data === "没有登录") {
@@ -96,19 +96,20 @@ function AddArticle(props) {
     dataProps.article_content_html = markdownContent
     dataProps.introduce_html = introducehtml
 
+    //console.log('articleId=:' + articleId)
     if (articleId === 0) {
-      // console.log('articleId=:' + articleId)
       dataProps.view_count = Math.ceil(Math.random() * 100) + 1000
       axios({
         method: 'post',
         url: servicePath.addArticle,
         header: { 'Access-Control-Allow-Origin': '*' },
         data: dataProps,
-        withCredentials: true
+        withCredentials: false
       }).then(
         res => {
+          //console.log("saveArticle", res.data)
           setArticleId(res.data.insertId)
-          if (res.data.isScuccess) {
+          if (res.data.data.isSuccess) {
             message.success('文章发布成功')
           } else {
             message.error('文章发布失败');
@@ -125,10 +126,11 @@ function AddArticle(props) {
         url: servicePath.updateArticle,
         header: { 'Access-Control-Allow-Origin': '*' },
         data: dataProps,
-        withCredentials: true
+        withCredentials: false
       }).then(
         res => {
-          if (res.data.isScuccess) {
+          //console.log("modify ", res.data)
+          if (res.data.data.isSuccess) {
             message.success('文章保存成功')
           } else {
             message.error('保存失败');
@@ -144,7 +146,7 @@ function AddArticle(props) {
     axios({
       method: 'get',
       url : servicePath.getArticleById + id, 
-      withCredentials: true,
+      withCredentials: false,
       header: { 'Access-Control-Allow-Origin': '*' }
     }).then(
       res => {
@@ -173,6 +175,9 @@ function AddArticle(props) {
     if (tmpId) {
       setArticleId(tmpId)
       getArticleById(tmpId)
+    }
+    return()=>{
+      setArticleId(0)
     }
   }, [])
 

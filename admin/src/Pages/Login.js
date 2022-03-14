@@ -32,11 +32,12 @@ function Login() {
       url: servicePath.checkLogin,
       header: { 'Access-Control-Allow-Origin': '*' },
       data: dataProps,
-      withCredentials: true
+      withCredentials: false
     }).then(
       res => {
         setIsLoading(false)
-        if (res.data.data === '登录成功') {
+        //console.log("login ", res.data)
+        if (res.data.data[0]['userName'] === userName) {
           localStorage.setItem('openId', res.data.openId)
           navigate('/index')
         } else {

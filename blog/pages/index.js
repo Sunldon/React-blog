@@ -81,6 +81,7 @@ const Home = (list) => {
 
 Home.getInitialProps = async () => {
   const promise = new Promise((resolve) => {
+
     axios(servicePath.getArticleList).then(
       (res) => {
         resolve(res.data)
